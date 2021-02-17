@@ -56,29 +56,47 @@ class HomeButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(left: 0, top: 40.0, right: 0, bottom: 0),
+        padding: EdgeInsets.only(top: 40.0),
         child: Center(
             child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Call OLI',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Setup',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Fall Sensor Demo',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
-            ),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Call OLI',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xffDB5461))),
+                    ))),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Setup',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xffDB5461))),
+                    ))),
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Fall Sensor Demo',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xffDB5461))),
+                    ))),
           ],
         )));
   }
