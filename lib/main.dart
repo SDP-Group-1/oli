@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,89 +16,5 @@ class MyApp extends StatelessWidget {
               style: ElevatedButton.styleFrom(primary: Color(0xff2B3964)))),
       home: HomePage(),
     );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-            padding: EdgeInsets.only(left: 0, top: 100.0, right: 0, bottom: 0),
-            child: new Column(
-              children: [
-                new Text('O.L.I.',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xff2B3964),
-                        fontSize: 100)),
-                new Text('operational lifting intern',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xff2B3964),
-                        fontSize: 30)),
-                HomeButtons()
-              ],
-            )
-            //   appBar: AppBar(
-            //       title: Text('OLI',
-            //           style: TextStyle(
-            //               fontWeight: FontWeight.w700, color: Color(0xff2B3964))),
-            //       backgroundColor: Color.fromRGBO(255, 239, 235, 1),
-            //       centerTitle: true,
-            //       shadowColor: Color.fromRGBO(0, 0, 0, 0),
-            //       toolbarHeight: 100),
-            //   body: HomeButtons(),
-            ));
-  }
-}
-
-class HomeButtons extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(top: 40.0),
-        child: Center(
-            child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Call OLI',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xffDB5461))),
-                    ))),
-            Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Setup',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xffDB5461))),
-                    ))),
-            Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Fall Sensor Demo',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xffDB5461))),
-                    ))),
-          ],
-        )));
   }
 }
