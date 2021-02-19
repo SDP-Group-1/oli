@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,48 +9,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'OLI',
       theme: ThemeData(
-        primaryColor: Colors.blue,
-      ),
+          primaryColor: Color(0xffFFEFEB),
+          fontFamily: 'Yaldevi Colombo',
+          scaffoldBackgroundColor: Color(0xffFFEFEB),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(primary: Color(0xff2B3964)))),
       home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('OLI'),
-      ),
-      body: HomeButtons(),
-    );
-  }
-}
-
-class HomeButtons extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Call OLI'),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Setup'),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Fall Sensor Demo'),
-            ),
-          ],
-        )
     );
   }
 }

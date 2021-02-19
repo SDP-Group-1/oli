@@ -72,5 +72,21 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+
+  fonts:
+    - family: Yaldevi Colombo
+      fonts: 
+        - asset: fonts/YaldeviColombo-Bold.ttf
+          weight: 900
+        - asset: fonts/YaldeviColombo-ExtraLight.ttf
+          weight: 100
+        - asset: fonts/YaldeviColombo-Light.ttf
+          weight: 200
+        - asset: fonts/YaldeviColombo-Medium.ttf
+          weight: 300
+        - asset: fonts/YaldeviColombo-Regular.ttf
+          weight: 400
+        - asset: fonts/YaldeviColombo-SemiBold.ttf
+          weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
