@@ -23,6 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_screenutil: ^0.5.2 #for responsive screens
+  sensors: ^0.4.2+6
+
 
 
   # The following adds the Cupertino Icons font to your application.
