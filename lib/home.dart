@@ -34,6 +34,7 @@ class HomeButtons extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
+                //CALL OLI BUTTON
                 padding: EdgeInsets.only(top: 10.0),
                 child: SizedBox(
                     width: 200,
@@ -46,6 +47,7 @@ class HomeButtons extends StatelessWidget {
                               color: Color(0xffDB5461))),
                     ))),
             Padding(
+                //SET UP BUTTON
                 padding: EdgeInsets.only(top: 10.0),
                 child: SizedBox(
                     width: 200,
@@ -58,13 +60,16 @@ class HomeButtons extends StatelessWidget {
                               color: Color(0xffDB5461))),
                     ))),
             Padding(
+                //BACKGROUND SENSOR DEMO BUTTON
                 padding: EdgeInsets.only(top: 10.0),
                 child: SizedBox(
                     width: 200,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Fall Sensor Demo',
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/background');
+                      },
+                      child: Text('Background sensors demo',
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
                               color: Color(0xffDB5461))),
