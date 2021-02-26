@@ -26,6 +26,11 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   Widget build(BuildContext context) {
     final List<String> accelerometer =
         _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
+    final List<String> gyroscope =
+        _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
+    final List<String> userAccelerometer = _userAccelerometerValues
+        ?.map((double v) => v.toStringAsFixed(1))
+        ?.toList();
     return new Scaffold(
         body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -35,7 +40,26 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Accelerometer: $accelerometer',
-                    style: TextStyle(fontSize: 32)),
+                    style: TextStyle(fontSize: 20)),
+              ],
+            ),
+            padding: const EdgeInsets.all(16.0),
+          ),
+          Padding(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('UserAccelerometer: $userAccelerometer',
+                    style: TextStyle(fontSize: 20)),
+              ],
+            ),
+            padding: const EdgeInsets.all(16.0),
+          ),
+          Padding(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Gyroscope: $gyroscope', style: TextStyle(fontSize: 20)),
               ],
             ),
             padding: const EdgeInsets.all(16.0),
