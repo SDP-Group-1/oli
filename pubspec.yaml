@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   flutter_screenutil: ^0.5.2 #for responsive screens
   sensors: ^0.4.2+6
+  location: ^3.0.0
+  flutter_bluetooth_serial: ^0.2.2
 
 
 

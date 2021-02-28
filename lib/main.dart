@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'call.dart';
 import 'home.dart';
 import 'background.dart';
 
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
-        '/background': (context) => BackgroundSensors()
+        '/background': (context) => BackgroundSensors(),
+        '/call' : (context) => Call(),
       },
       title: 'OLI',
       theme: ThemeData(
