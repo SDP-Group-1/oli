@@ -10,7 +10,6 @@ class Call extends StatefulWidget {
 
 class _CallState extends State<Call> {
   Location location = Location();
-  LocationData _locationData;
   String lat;
   String lng;
 
@@ -22,12 +21,12 @@ class _CallState extends State<Call> {
 
   @override
   Widget build(BuildContext context) {
-    lat = _locationData.latitude.toString();
-    lng = _locationData.longitude.toString();
-    return FutureBuilder(
+    return FutureBuilder<LocationData>(
         future: getLoc(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            lat = snapshot.data.latitude.toString();
+            lng = snapshot.data.longitude.toString();
             return Scaffold(
               appBar: AppBar(
                 title: Text('Calling OLI'),
@@ -45,7 +44,7 @@ class _CallState extends State<Call> {
         });
   }
 
-  getLoc() async {
+  Future<LocationData> getLoc() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
@@ -53,7 +52,7 @@ class _CallState extends State<Call> {
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        return;
+        return null;
       }
     }
 
@@ -61,13 +60,14 @@ class _CallState extends State<Call> {
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        return;
+        return null;
       }
     }
 
     // this data can then be parsed into something that can be sent through
     // bluetooth for OLI to read
-    _locationData = await location.getLocation();
-    developer.log(_locationData.longitude.toString());
+    LocationData _locationData = await location.getLocation();
+
+    return _locationData;
   }
 }
