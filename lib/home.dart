@@ -40,7 +40,9 @@ class HomeButtons extends StatelessWidget {
                     width: 200,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/call');
+                      },
                       child: Text('Call OLI',
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
