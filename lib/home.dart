@@ -18,7 +18,8 @@ class HomePage extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: Color(0xff2B3964),
                         fontSize: 30)),
-                HomeButtons()
+                HomeButtons(),
+                Robot(),
               ],
             )));
   }
@@ -78,5 +79,56 @@ class HomeButtons extends StatelessWidget {
                     ))),
           ],
         )));
+  }
+}
+
+class Robot extends StatefulWidget {
+  @override
+  _RobotState createState() => _RobotState();
+}
+
+class _RobotState extends State<Robot> {
+  bool isConnected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isConnected) return Padding(
+        padding: EdgeInsets.only(top: 40.0),
+      child: Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.done_outline,
+            color: Colors.green,
+        ),
+          Text('Robot connected.',
+          style: TextStyle(
+          fontWeight: FontWeight.w900,
+          color: Color(0xffDB5461))
+        ),
+        ],
+        ),
+      ),
+    );
+    else return Padding(
+      padding: EdgeInsets.only(top: 40.0),
+      child: Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.clear,
+              color: Colors.red,
+            ),
+            Text('Robot not connected.',
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xffDB5461))
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
