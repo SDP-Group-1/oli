@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:oli/database.dart';
 import 'package:sensors/sensors.dart';
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:math';
 
 class BackgroundSensors extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -22,6 +24,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   List<StreamSubscription<dynamic>> _streamSubscriptions =
       <StreamSubscription<dynamic>>[];
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
+
+  DatabaseHelper helper = DatabaseHelper.instance;
+
   @override
   Widget build(BuildContext context) {
     final List<String> accelerometer =
@@ -43,7 +48,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
                     style: TextStyle(fontSize: 20)),
               ],
             ),
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
           ),
           Padding(
             child: Row(
@@ -53,7 +58,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
                     style: TextStyle(fontSize: 20)),
               ],
             ),
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
           ),
           Padding(
             child: Row(
@@ -62,7 +67,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
                 Text('Gyroscope: $gyroscope', style: TextStyle(fontSize: 20)),
               ],
             ),
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
           )
         ]));
   }
@@ -78,10 +83,19 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   @override
   void initState() {
     super.initState();
+    _userAccelerometerValues = <double>[0.0, 0.0, 0.0];
+    const fiveSecondInterval = const Duration(seconds: 5);
+    new Timer.periodic(fiveSecondInterval, (Timer t) {
+      updateDatabase(); //write csv file here, delete contents of db / create new db????
+    });
     _streamSubscriptions
         .add(accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
+        //if 15 m/s^2 is crossed
         _accelerometerValues = <double>[event.x, event.y, event.z];
+        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 15) {
+          _userAccelerometerValues = <double>[event.x, event.y, event.z];
+        }
       });
     }));
     _streamSubscriptions.add(gyroscopeEvents.listen((GyroscopeEvent event) {
@@ -89,11 +103,32 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         _gyroscopeValues = <double>[event.x, event.y, event.z];
       });
     }));
-    _streamSubscriptions
-        .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
-      setState(() {
-        _userAccelerometerValues = <double>[event.x, event.y, event.z];
-      });
-    }));
+    // _streamSubscriptions
+    //     .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
+    //   setState(() {
+    //
+    //   });
+    // }));
+  }
+
+  void updateDatabase() async {
+    print('This timer works');
+    Reading reading = Reading();
+    print(_userAccelerometerValues[0]);
+    reading.accelerometer_x = _userAccelerometerValues[0];
+    reading.accelerometer_y = _userAccelerometerValues[1];
+    reading.accelerometer_z = _userAccelerometerValues[2];
+    reading.gyro_x = _gyroscopeValues[0];
+    reading.gyro_y = _gyroscopeValues[1];
+    reading.gyro_z = _gyroscopeValues[2];
+    int id = await helper.insert(reading);
+    print(id);
+    Reading x = await helper.queryReading(id);
+    print(x.accelerometer_x);
   }
 } //_BACKGROUND ACTIVITY STATE
+
+////TO DEBUG -
+///Why database never closes / deletes?
+/// Values not getting inserted into db but condition (accelerometer) being read correctly
+///
