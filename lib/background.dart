@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:oli/database.dart';
 import 'package:sensors/sensors.dart';
 import 'dart:async';
-import 'dart:isolate';
 import 'dart:math';
 
 class BackgroundSensors extends StatelessWidget {
@@ -54,7 +53,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('UserAccelerometer: $userAccelerometer',
+                Text('Acc that crossed threshold: $userAccelerometer',
                     style: TextStyle(fontSize: 20)),
               ],
             ),
@@ -73,6 +72,8 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 
   @override
+  //current error here - why is the below print statement not being registered
+  //in the log when the app closes?
   void dispose() {
     super.dispose();
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
