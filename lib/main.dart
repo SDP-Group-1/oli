@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oli/setup.dart';
 import 'call.dart';
 import 'home.dart';
 import 'background.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/background': (context) => BackgroundSensors(),
         '/call' : (context) => Call(),
+        '/setup' : (context) => Setup(),
       },
       title: 'OLI',
       theme: ThemeData(
