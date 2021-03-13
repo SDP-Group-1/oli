@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 // database table and column names
-final String dbName = 'sensors';
+final String tableName = 'sensors';
 final String columnId = '_id';
 final String columnWord = 'word';
 final String columnFrequency = 'frequency';
@@ -94,7 +94,7 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     print('creating table');
     await db.execute('''
-          CREATE TABLE $dbName (
+          CREATE TABLE $tableName (
             _id INTEGER PRIMARY KEY,
             a_x REAL NOT NULL,
             a_y REAL NOT NULL,
@@ -110,13 +110,13 @@ class DatabaseHelper {
 
   Future<int> insert(Reading reading) async {
     Database db = await database;
-    int id = await db.insert(dbName, reading.toMap());
+    int id = await db.insert(tableName, reading.toMap());
     return id;
   }
 
   Future<Reading> queryReading(int id) async {
     Database db = await database;
-    List<Map> maps = await db.query(dbName,
+    List<Map> maps = await db.query(tableName,
         columns: [columnId, 'a_x', 'a_y', 'a_z', 'g_x', 'g_y', 'g_z'],
         where: '$columnId = ?',
         whereArgs: [id]);
@@ -128,8 +128,7 @@ class DatabaseHelper {
 
   Future dropTable() async {
     Database db = await database;
-    var a = db.execute('DROP TABLE $dbName');
-    db.close();
+    var a = db.execute('DELETE FROM $tableName');
     return a;
   }
 

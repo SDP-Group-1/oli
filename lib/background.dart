@@ -84,7 +84,6 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       print('cancelling subs');
     }
     var a = helper.dropTable();
-    helper = null;
     //should probably replace the a with something else :/
   }
 
