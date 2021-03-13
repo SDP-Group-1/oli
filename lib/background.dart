@@ -77,7 +77,10 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     super.dispose();
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
+      print('cancelling subs');
     }
+    var a = helper.dropTable();
+    print(a);
   }
 
   @override
@@ -111,11 +114,18 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     // }));
   }
 
+//delete this lol
+  void query() async {
+    Reading x = await helper.queryReading(1);
+    print(x.accelerometerX);
+  }
+
+  /////
   void updateDatabase() async {
     print('This timer works');
     Reading reading = Reading();
     print(_userAccelerometerValues[0]);
-    reading.accelerometer_x = _userAccelerometerValues[0];
+    reading.accelerometerX = _userAccelerometerValues[0];
     reading.accelerometer_y = _userAccelerometerValues[1];
     reading.accelerometer_z = _userAccelerometerValues[2];
     reading.gyro_x = _gyroscopeValues[0];
@@ -124,7 +134,8 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     int id = await helper.insert(reading);
     print(id);
     Reading x = await helper.queryReading(id);
-    print(x.accelerometer_x);
+    print("frm table ");
+    print(x.accelerometerX);
   }
 } //_BACKGROUND ACTIVITY STATE
 

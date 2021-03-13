@@ -12,7 +12,7 @@ final String columnFrequency = 'frequency';
 // data model class
 class Reading {
   int id;
-  double accelerometer_x; //id
+  double accelerometerX; //id
   double accelerometer_y; //word
   double accelerometer_z; //freq
   double gyro_x;
@@ -24,18 +24,18 @@ class Reading {
   // convenience constructor to create a Word object
   Reading.fromMap(Map<String, dynamic> map) {
     id = map['_id'];
-    double accelerometer_x = map['a_x']; //id
-    double accelerometer_y = map['a_y']; //word
-    double accelerometer_z = map['a_z']; //freq
-    double gyro_x = map['g_x'];
-    double gyro_y = map['g_y'];
-    double gyro_z = map['g_z'];
+    accelerometerX = map['a_x']; //id
+    accelerometer_y = map['a_y']; //word
+    accelerometer_z = map['a_z']; //freq
+    gyro_x = map['g_x'];
+    gyro_y = map['g_y'];
+    gyro_z = map['g_z'];
   }
 
   // convenience method to create a Map from this Word object
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
-      'a_x': accelerometer_x,
+      'a_x': accelerometerX,
       'a_y': accelerometer_y,
       'a_z': accelerometer_z,
       'g_x': gyro_x,
@@ -112,4 +112,18 @@ class DatabaseHelper {
     }
     return null;
   }
+
+  Future dropTable() async {
+    Database db = await database;
+    var a = db.execute('DROP TABLE $dbName');
+    return a;
+  }
+
+  // Future<void> removeObject(int key) async {
+  //   await db.delete(
+  //     MoviesWatchedTableName,
+  //     where: 'id = ?',
+  //     whereArgs: [key],
+  //   );
+  // }
 }
