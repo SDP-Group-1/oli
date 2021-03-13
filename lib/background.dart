@@ -132,12 +132,6 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         _gyroscopeValues = <double>[event.x, event.y, event.z];
       });
     }));
-    // _streamSubscriptions
-    //     .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
-    //   setState(() {
-    //
-    //   });
-    // }));
   }
 
   /////
@@ -169,6 +163,10 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(dataset);
     file.writeAsString(dataset);
     print(file.path);
+
+    //optional - add Navigator,pop to remove this from the route
+    //will automatically call dispose - then add the new widget depending on
+    //whether that was a fall or not.
   }
 
   Future<dynamic> platformCallHandler(MethodCall call) async {

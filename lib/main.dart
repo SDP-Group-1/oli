@@ -3,6 +3,7 @@ import 'package:oli/setup.dart';
 import 'call.dart';
 import 'home.dart';
 import 'background.dart';
+import 'postFall.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,8 +17,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomePage(),
         '/background': (context) => BackgroundSensors(),
-        '/call' : (context) => Call(),
-        '/setup' : (context) => Setup(),
+        '/call': (context) => Call(),
+        '/setup': (context) => Setup(),
+        '/hasFallen': (context) => PostFallTrue(),
+        '/hasNotFallen': (context) => PostFallFalse()
       },
       title: 'OLI',
       theme: ThemeData(
