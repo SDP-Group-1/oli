@@ -95,7 +95,7 @@ class DatabaseHelper {
     print('creating table');
     await db.execute('''
           CREATE TABLE $tableName (
-            _id INTEGER PRIMARY KEY,
+            $columnId INTEGER PRIMARY KEY,
             a_x REAL NOT NULL,
             a_y REAL NOT NULL,
             a_z REAL NOT NULL,
@@ -130,6 +130,13 @@ class DatabaseHelper {
     Database db = await database;
     var a = db.execute('DELETE FROM $tableName');
     return a;
+  }
+
+  Future<List<Map<dynamic, dynamic>>> queryReadings(int id1, int id2) async {
+    Database db = await database;
+    List<Map> maps = await db.rawQuery(
+        'SELECT * FROM $tableName WHERE $columnId BETWEEN $id1 AND $id2');
+    return maps;
   }
 
   // Future<void> removeObject(int key) async {
