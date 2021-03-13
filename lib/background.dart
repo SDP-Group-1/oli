@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:oli/database.dart';
-import 'package:sensors/sensors.dart';
 import 'dart:async';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:oli/database.dart';
+import 'package:sensors/sensors.dart';
 
 class BackgroundSensors extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       <StreamSubscription<dynamic>>[];
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
 
-  DatabaseHelper helper = DatabaseHelper.instance;
+  DatabaseHelper helper;
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +84,21 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       print('cancelling subs');
     }
     var a = helper.dropTable();
-    print(a);
+    helper = null;
+    //should probably replace the a with something else :/
   }
 
   @override
   void initState() {
     super.initState();
+    helper = DatabaseHelper.instance;
+    //referencing database.dart
+
+    //tried to create table again using the method every time initstate is called
+    //but error here - table not found
+    // helper.onCreate(helper.getDatabase(), helper.getDatabaseVersion());
+    new MethodChannel("flutter.temp.channel")
+        .setMethodCallHandler(platformCallHandler);
     _userAccelerometerValues = <double>[0.0, 0.0, 0.0];
     const fiveSecondInterval = const Duration(seconds: 5);
     new Timer.periodic(fiveSecondInterval, (Timer t) {
@@ -115,17 +127,10 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     // }));
   }
 
-//delete this lol
-  void query() async {
-    Reading x = await helper.queryReading(1);
-    print(x.accelerometerX);
-  }
-
   /////
   void updateDatabase() async {
     print('This timer works');
     Reading reading = Reading();
-    print(_userAccelerometerValues[0]);
     reading.accelerometerX = _userAccelerometerValues[0];
     reading.accelerometer_y = _userAccelerometerValues[1];
     reading.accelerometer_z = _userAccelerometerValues[2];
@@ -137,6 +142,13 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     Reading x = await helper.queryReading(id);
     print("frm table ");
     print(x.accelerometerX);
+  }
+
+  Future<dynamic> platformCallHandler(MethodCall call) async {
+    if (call.method == "destroy") {
+      print("destroy");
+      dispose();
+    }
   }
 } //_BACKGROUND ACTIVITY STATE
 

@@ -56,6 +56,14 @@ class DatabaseHelper {
   // Increment this version when you need to change the schema.
   static final _databaseVersion = 1;
 
+  String getDatabaseName() {
+    return _databaseName;
+  }
+
+  int getDatabaseVersion() {
+    return _databaseVersion;
+  }
+
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -65,6 +73,10 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database;
     _database = await _initDatabase();
+    return _database;
+  }
+
+  Database getDatabase() {
     return _database;
   }
 
@@ -80,6 +92,7 @@ class DatabaseHelper {
 
   // SQL string to create the database
   Future _onCreate(Database db, int version) async {
+    print('creating table');
     await db.execute('''
           CREATE TABLE $dbName (
             _id INTEGER PRIMARY KEY,
@@ -116,6 +129,7 @@ class DatabaseHelper {
   Future dropTable() async {
     Database db = await database;
     var a = db.execute('DROP TABLE $dbName');
+    db.close();
     return a;
   }
 
