@@ -1,3 +1,8 @@
+/**
+ * database.dart - helper file that contains methods to perform 
+ * basic CRUD operations on a SQLite database. 
+ */
+
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

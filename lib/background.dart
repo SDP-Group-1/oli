@@ -1,3 +1,9 @@
+/**
+ * background.dart - contains the stateless widget that provides the 
+ * UI for fall detection. There are a lot of background processes going 
+ * on here, with respect to listening to sensors and inserting data 
+ * into the SQLite database (see database.dart for helper methods).
+ */
 import 'dart:async';
 import 'dart:math';
 import 'dart:io';
@@ -138,9 +144,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   Future<int> updateDatabase() async {
     print('This timer works');
     Reading reading = Reading();
-    reading.accelerometerX = _userAccelerometerValues[0];
-    reading.accelerometer_y = _userAccelerometerValues[1];
-    reading.accelerometer_z = _userAccelerometerValues[2];
+    reading.accelerometerX = _accelerometerValues[0];
+    reading.accelerometer_y = _accelerometerValues[1];
+    reading.accelerometer_z = _accelerometerValues[2];
     reading.gyro_x = _gyroscopeValues[0];
     reading.gyro_y = _gyroscopeValues[1];
     reading.gyro_z = _gyroscopeValues[2];
