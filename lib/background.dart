@@ -38,16 +38,14 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   int currentID;
   int triggerID;
   DatabaseHelper helper;
-
+  bool fallTriggered = false;
   @override
   Widget build(BuildContext context) {
     final List<String> accelerometer =
         _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
     final List<String> gyroscope =
         _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
-    final List<String> userAccelerometer = _userAccelerometerValues
-        ?.map((double v) => v.toStringAsFixed(1))
-        ?.toList();
+
     return new Scaffold(
         body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,7 +55,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Accelerometer: $accelerometer',
-                    style: TextStyle(fontSize: 20)),
+                    style: TextStyle(fontSize: 18)),
               ],
             ),
             padding: const EdgeInsets.all(8.0),
@@ -66,7 +64,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Acc that crossed threshold: $userAccelerometer',
+                Text('Classifier triggered: $fallTriggered',
                     style: TextStyle(fontSize: 20)),
               ],
             ),
@@ -122,6 +120,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         updateDatabase();
         _accelerometerValues = <double>[event.x, event.y, event.z];
         if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 15) {
+          fallTriggered = true;
           triggerID = currentID;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
@@ -141,7 +140,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 
   /////
-  Future<int> updateDatabase() async {
+  void updateDatabase() async {
     print('This timer works');
     Reading reading = Reading();
     reading.accelerometerX = _accelerometerValues[0];
@@ -155,6 +154,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 
   void writeCSV(int id1, int id2) async {
+    //no need to keep reading sensor values after fall event might have happened
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
       print('cancelling subs');
@@ -169,7 +169,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(dataset);
     file.writeAsString(dataset);
     print(file.path);
-
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.popAndPushNamed(context, '/hasFallen');
+    });
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.

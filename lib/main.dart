@@ -6,11 +6,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:oli/auth.dart';
 import 'package:oli/setup.dart';
 import 'call.dart';
 import 'home.dart';
 import 'background.dart';
 import 'postFall.dart';
+import 'auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
         '/call': (context) => Call(),
         '/setup': (context) => Setup(),
         '/hasFallen': (context) => PostFallTrue(),
-        '/hasNotFallen': (context) => PostFallFalse()
+        '/hasNotFallen': (context) => PostFallFalse(),
+        '/login': (context) => LoginPageWidget()
       },
       title: 'OLI',
       theme: ThemeData(

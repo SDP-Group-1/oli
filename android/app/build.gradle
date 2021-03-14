@@ -22,11 +22,18 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+dependencies{
+        implementation platform('com.google.firebase:firebase-bom:26.7.0')
+        implementation 'com.google.firebase:firebase-auth'
+}
 
 android {
     compileSdkVersion 29
 
+    
     lintOptions {
         disable 'InvalidPackage'
     }

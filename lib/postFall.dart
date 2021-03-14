@@ -14,6 +14,6 @@ class PostFallTrue extends StatelessWidget {
 
 class PostFallFalse extends StatelessWidget {
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('Yes, you fell')));
+    return Scaffold(body: Center(child: Text('False alarm')));
   }
 }
