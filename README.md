@@ -1,16 +1,19 @@
-# oli
+# operational lookout intern
 
-A new Flutter project.
+The repository for the OLI App
 
-## Getting Started
+## Purpose of the app: 
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Structure:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+The project is created using the Flutter framework, and primarily programmed in Dart (with some Android specific code in Java).
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The app consists of:
+- main.dart - the starting point of the app 
+- home.dart - consists of the layout for the home page + the state of the robot 
+- call.dart - implements the 'Call OLI' function. 
+- setup.dart - interface for user to set up the app and send a request to the robot to map their home. 
+- background.dart - the background processes required for monitoring the sensors and detection a fall
+- database.dart - helper functions used to manipulate a local SQLite database
+
