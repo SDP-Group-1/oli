@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:oli/setup.dart';
 import 'call.dart';
+import 'details.dart';
 import 'home.dart';
 import 'background.dart';
 import 'postFall.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/background': (context) => BackgroundSensors(),
         '/call': (context) => Call(),
         '/setup': (context) => Setup(),
+        '/setup/details': (context) => Details(),
         '/hasFallen': (context) => PostFallTrue(),
         '/hasNotFallen': (context) => PostFallFalse()
       },

@@ -32,6 +32,7 @@ class Setup extends StatelessWidget {
                             height: 50,
                             child: ElevatedButton(
                               onPressed: () {
+                                Navigator.pushNamed(context, '/setup/details');
                               },
                               child: Text('Update Details',
                                   style: TextStyle(
