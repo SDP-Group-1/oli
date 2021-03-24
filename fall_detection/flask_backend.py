@@ -36,9 +36,7 @@ def parse(fileName:str)->np.array:
     std_motionless_smv = np.std(smv_list[min_idx:])
     max_smv = np.max(smv_list)
     min_smv = np.min(smv_list)
-    # duration need to confirm by the sampling rate
-    # duration = min_idx - max_idx
-    # calculate slope fature
+    duration = (min_idx - max_idx) * 10
     max_line = sample.iloc[max_idx]
     min_line = sample.iloc[min_idx]
     max_smv_x = max_line['acc_x']
