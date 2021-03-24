@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
         '/call': (context) => Call(),
         '/setup': (context) => Setup(),
         '/setup/details': (context) => Details(),
-        '/hasFallen': (context) => PostFallTrue(),
-        '/hasNotFallen': (context) => PostFallFalse()
+        '/fall': (context) => FallDetection(),
+        '/ems': (context) => EMS()
       },
       title: 'OLI',
       theme: ThemeData(

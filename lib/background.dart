@@ -37,6 +37,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
   int currentID;
   int triggerID;
+  bool isTriggered = false;
   DatabaseHelper helper;
 
   @override
@@ -66,7 +67,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Acc that crossed threshold: $userAccelerometer',
+                Text('Classifier activated: $isTriggered',
                     style: TextStyle(fontSize: 20)),
               ],
             ),
@@ -123,6 +124,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         _accelerometerValues = <double>[event.x, event.y, event.z];
         if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17) {
           triggerID = currentID;
+          isTriggered = true;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
           print("We been triggered");
@@ -170,7 +172,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(dataset);
     file.writeAsString(dataset);
     print(file.path);
-
+    Navigator.popAndPushNamed(context, '/fall');
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.
@@ -184,7 +186,5 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 } //_BACKGROUND ACTIVITY STATE
 
-////TO DEBUG -
-///Why database never closes / deletes?
-/// Values not getting inserted into db but condition (accelerometer) being read correctly
-///
+//goal for next demo - extend it to storing sensor readings every certain microseconds -
+//Duration(microseconds:5)
