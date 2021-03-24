@@ -121,7 +121,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         //if 15 m/s^2 is crossed
         updateDatabase();
         _accelerometerValues = <double>[event.x, event.y, event.z];
-        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 15) {
+        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17) {
           triggerID = currentID;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
@@ -129,6 +129,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
           Future.delayed(twoSeconds, () {
             print(triggerID.toString() + ': trigger ID');
             writeCSV(triggerID - 20, triggerID + 20);
+            // implement the
           });
         }
       });

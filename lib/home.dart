@@ -47,7 +47,7 @@ class HomeButtons extends StatelessWidget {
                       child: Text('Call OLI',
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
-                              color: Color(0xffDB5461))),
+                              color: Color(0xffdb5461))),
                     ))),
             Padding(
                 //SET UP BUTTON
