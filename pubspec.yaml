@@ -35,13 +35,12 @@ dependencies:
       ref: dart2
       path: sqflite_porter
     version: '>=0.2.0'
-  loading_gifs: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   # Making http request to the python script run on server / localhost
-  http: ^0.13.1
+  http: ^0.12.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,12 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import pandas as pd
 import numpy as np
 import pickle
-
-
-app = Flask(__name__)
-
-@app.route('/', methods = ['GET'])
+import json
 
 def load_model():
     f = open('clf_pickle','rb')
@@ -15,8 +11,8 @@ def load_model():
     f.close()
     return classifier
 
-def parse(fileName:str)->np.array:
-    sample = pd.read_csv(fileName)
+def parse(filePath:str)->np.array:
+    sample = pd.read_csv(filePath)
     df = pd.DataFrame(columns=['mean_smv', 'std_smv', 'std_mless',
                                'max_smv', 'min_smv', 'slope', 'duration'])
     # total_frames = sample.shape[0]
@@ -53,11 +49,21 @@ def parse(fileName:str)->np.array:
 
     return parsed_sample
 
-def predict(clf, sample_window)->bool:
-    result = clf.predict(sample_window)
+
+
+app = Flask(__name__)
+
+@app.route('/', methods = ['POST'])
+def predict():
+    content = json.load(request.body)
+    filePath = content['path']
+    clf = load_model()
+    sample = parse(filePath)
+    result = clf.predict(sample)
     if result == 1:
         return True
     else:
         return False
+
 if __name__ == '__main__':
     app.run()

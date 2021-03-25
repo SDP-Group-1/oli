@@ -5,6 +5,7 @@
  * into the SQLite database (see database.dart for helper methods).
  */
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:io';
 
@@ -12,9 +13,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:oli/database.dart';
+import 'package:oli/flaskApi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sqflite_porter/utils/csv_utils.dart';
+
+import 'flaskApi.dart';
 
 class BackgroundSensors extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -37,7 +41,6 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
   int currentID;
   int triggerID;
-  bool isTriggered = false;
   DatabaseHelper helper;
 
   @override
@@ -67,7 +70,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Classifier activated: $isTriggered',
+                Text('Acc that crossed threshold: $userAccelerometer',
                     style: TextStyle(fontSize: 20)),
               ],
             ),
@@ -119,19 +122,25 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     _streamSubscriptions
         .add(accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
-        //if 15 m/s^2 is crossed
+        //if 17 m/s^2 is crossed
         updateDatabase();
         _accelerometerValues = <double>[event.x, event.y, event.z];
         if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17) {
           triggerID = currentID;
-          isTriggered = true;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
           print("We been triggered");
           Future.delayed(twoSeconds, () {
             print(triggerID.toString() + ': trigger ID');
-            writeCSV(triggerID - 20, triggerID + 20);
-            // implement the
+
+            writeCSV(triggerID - 50, triggerID + 50);
+
+            // if (getPredict(csv_path) == 1) {
+            //   setState(() {
+            //
+            //   });
+            // }
+
           });
         }
       });
@@ -172,7 +181,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(dataset);
     file.writeAsString(dataset);
     print(file.path);
-    Navigator.popAndPushNamed(context, '/fall');
+
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.
@@ -186,5 +195,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 } //_BACKGROUND ACTIVITY STATE
 
-//goal for next demo - extend it to storing sensor readings every certain microseconds -
-//Duration(microseconds:5)
+////TO DEBUG -
+///Why database never closes / deletes?
+/// Values not getting inserted into db but condition (accelerometer) being read correctly
+///
