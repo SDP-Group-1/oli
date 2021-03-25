@@ -60,10 +60,11 @@ def predict():
     clf = load_model()
     sample = parse(filePath)
     result = clf.predict(sample)
+
     if result == 1:
-        return True
+        return jsonify({'result':1})
     else:
-        return False
+        return jsonify({'result':0})
 
 if __name__ == '__main__':
     app.run()
