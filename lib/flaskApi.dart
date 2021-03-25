@@ -11,7 +11,9 @@ Future<dynamic> getPredict(csv_path) async {
   });
 
   if (response.statusCode == 200) {
+    print("Response received");
     final decoded = json.decode(response.body) as Map<String, dynamic>;
+    print(decoded['result']);
     return decoded['result'];
   }
 }

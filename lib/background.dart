@@ -134,13 +134,18 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             print(triggerID.toString() + ': trigger ID');
 
             writeCSV(triggerID - 50, triggerID + 50);
-
-            // if (getPredict(csv_path) == 1) {
-            //   setState(() {
-            //
-            //   });
-            // }
-            Navigator.popAndPushNamed(context, '/fall');
+            String directory_path =
+                '/data/user/0/com.example.oli/app_flutter/dataset.csv';
+            print("something here to see if it works");
+            print(directory_path);
+            print("Finished writing CSV, now classifier");
+            if (getPredict(directory_path) == 1) {
+              setState(() {
+                Navigator.popAndPushNamed(context, '/fall');
+              });
+            } else {
+              print("Not a fall");
+            }
           });
         }
       });
@@ -180,8 +185,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     var dataset = mapListToCsv(requiredWindow);
     print(dataset);
     file.writeAsString(dataset);
+    print("File path");
     print(file.path);
-
+    // return file.path;
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.
