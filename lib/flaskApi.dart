@@ -11,7 +11,7 @@ Future<int> getPredict(csv_path) async {
       'path': csv_path,
     }),
   );
-
+  print(response.statusCode);
   if (response.statusCode == 200) {
     final decoded = json.decode(response.body) as Map<String, int>;
     return decoded['result'];

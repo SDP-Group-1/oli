@@ -97,7 +97,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       subscription.cancel();
       print('cancelling subs');
     }
-    var a = helper.dropTable();
+    helper.dropTable();
     //should probably replace the a with something else :/
   }
 
@@ -125,7 +125,8 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         //if 17 m/s^2 is crossed
         updateDatabase();
         _accelerometerValues = <double>[event.x, event.y, event.z];
-        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17) {
+        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17 &&
+            triggerID == 0) {
           triggerID = currentID;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
@@ -133,19 +134,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
           Future.delayed(twoSeconds, () {
             print(triggerID.toString() + ': trigger ID');
 
-            writeCSV(triggerID - 50, triggerID + 50);
-            String directory_path =
-                '/data/user/0/com.example.oli/app_flutter/dataset.csv';
-            print("something here to see if it works");
-            print(directory_path);
-            print("Finished writing CSV, now classifier");
-            if (getPredict(directory_path) == 1) {
-              setState(() {
-                Navigator.popAndPushNamed(context, '/fall');
-              });
-            } else {
-              print("Not a fall");
-            }
+            // String directory_path =
+            //'/data/user/0/com.example.oli/app_flutter/dataset.csv';
+            callClassifier();
           });
         }
       });
@@ -155,6 +146,20 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         _gyroscopeValues = <double>[event.x, event.y, event.z];
       });
     }));
+  }
+
+  void callClassifier() async {
+    String directoryPath = await writeCSV(triggerID - 20, triggerID + 20);
+    print("something here to see if it works");
+    print(directoryPath);
+    print("Finished writing CSV, now classifier");
+    if (getPredict(directoryPath) == 1) {
+      setState(() {
+        Navigator.popAndPushNamed(context, '/fall');
+      });
+    } else {
+      print("Not a fall");
+    }
   }
 
   /////
@@ -171,7 +176,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(currentID.toString() + ":currentID _________________________");
   }
 
-  void writeCSV(int id1, int id2) async {
+  Future<String> writeCSV(int id1, int id2) async {
+    print("=====================================");
+    print("$id1 to $id2");
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
       print('cancelling subs');
@@ -187,7 +194,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     file.writeAsString(dataset);
     print("File path");
     print(file.path);
-    // return file.path;
+    return file.path;
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.
