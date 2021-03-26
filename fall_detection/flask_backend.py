@@ -1,18 +1,24 @@
 from flask import Flask, jsonify, request
+import sklearn
 import pandas as pd
 import numpy as np
+import os
 import pickle
 import json
 
 def load_model():
-    f = open('clf_pickle','rb')
+    model_path = os.path.join(relative_path, 'clf_pickle')
+    f = open(model_path,'rb')
     s = f.read()
     classifier=pickle.loads(s)
     f.close()
     return classifier
 
-def parse(filePath:str)->np.array:
-    sample = pd.read_csv(filePath)
+def parse(csv_str:str):
+    f = open('{}/window.csv'.format(relative_path), 'w')
+    f.write(csv_str)
+    f.close()
+    sample = pd.read_csv('{}/window.csv'.format(relative_path))
     df = pd.DataFrame(columns=['mean_smv', 'std_smv', 'std_mless',
                                'max_smv', 'min_smv', 'slope', 'duration'])
     # total_frames = sample.shape[0]
@@ -35,36 +41,36 @@ def parse(filePath:str)->np.array:
     duration = (min_idx - max_idx) * 10
     max_line = sample.iloc[max_idx]
     min_line = sample.iloc[min_idx]
-    max_smv_x = max_line['acc_x']
-    max_smv_y = max_line['acc_y']
-    max_smv_z = max_line['acc_z']
-    min_smv_x = min_line['acc_x']
-    min_smv_y = min_line['acc_y']
-    min_smv_z = min_line['acc_z']
+    max_smv_x = max_line['a_x']
+    max_smv_y = max_line['a_y']
+    max_smv_z = max_line['a_z']
+    min_smv_x = min_line['a_x']
+    min_smv_y = min_line['a_y']
+    min_smv_z = min_line['a_z']
     slope = np.sqrt(pow(max_smv_x - min_smv_x, 2)
                    + pow(max_smv_y - min_smv_y, 2)
                    + pow(max_smv_z - min_smv_z, 2))
 
     parsed_sample = np.array([mean_smv, std_smv, std_motionless_smv, max_smv, min_smv, slope, duration])
 
-    return parsed_sample
+    return parsed_sample.reshape(1,-1)
 
 
 
 app = Flask(__name__)
-
 @app.route('/', methods = ['POST'])
 def predict():
-    content = json.load(request.body)
-    filePath = content['path']
+    csv_str = request.json['csv']
     clf = load_model()
-    sample = parse(filePath)
-    result = clf.predict(sample)
-
+    sample = parse(csv_str)
+    result = clf.predict(sample)[0]
     if result == 1:
-        return jsonify({'result':1})
+        print('This is a normal event')
+        return jsonify({'result': 'Normal'})
     else:
-        return jsonify({'result':0})
+        print('This is a fall event')
+        return jsonify({'result': 'Fall'})
 
 if __name__ == '__main__':
-    app.run()
+    relative_path = os.path.dirname(os.path.abspath(__file__))
+    app.run(host='0.0.0.0', debug=True, port=5000)
