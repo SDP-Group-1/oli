@@ -149,11 +149,11 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 
   void callClassifier() async {
-    String directoryPath = await writeCSV(triggerID - 20, triggerID + 20);
+    String dataset = await writeCSV(triggerID - 20, triggerID + 20);
     print("something here to see if it works");
-    print(directoryPath);
+    print(dataset);
     print("Finished writing CSV, now classifier");
-    var classifierResult = await getPredict(directoryPath);
+    var classifierResult = await getPredict(dataset);
     if (classifierResult == 1) {
       setState(() {
         Navigator.popAndPushNamed(context, '/fall');
@@ -191,11 +191,12 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     var requiredWindow = await helper.queryReadings(id1, id2);
     print('query done');
     var dataset = mapListToCsv(requiredWindow);
-    print(dataset);
-    file.writeAsString(dataset);
-    print("File path");
-    print(file.path);
-    return file.path;
+    return dataset;
+    // print(dataset);
+    // file.writeAsString(dataset);
+    // print("File path");
+    // print(file.path);
+    // return file.path;
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.
