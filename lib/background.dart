@@ -140,7 +140,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             //
             //   });
             // }
-
+            Navigator.popAndPushNamed(context, '/fall');
           });
         }
       });
