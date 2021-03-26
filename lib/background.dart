@@ -153,7 +153,8 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print("something here to see if it works");
     print(directoryPath);
     print("Finished writing CSV, now classifier");
-    if (getPredict(directoryPath) == 1) {
+    var classifierResult = await getPredict(directoryPath);
+    if (classifierResult == 1) {
       setState(() {
         Navigator.popAndPushNamed(context, '/fall');
       });
