@@ -39,7 +39,7 @@ class _FallState extends State<Fall> {
     new Timer.periodic(Duration(seconds: 2), (t) {
       if (!mounted) return;
       setState(() {
-        print('yoyoyoyoyo');
+        print('Post-classifier events');
         _isLoading = false;
         t.cancel();
         new Timer.periodic(Duration(seconds: 1), (a) {
@@ -77,7 +77,7 @@ class _FallState extends State<Fall> {
           body: Center(
               child: FadeInImage.assetNetwork(
                   placeholder: cupertinoActivityIndicator,
-                  image: "image.png")));
+                  image: 'assets_logo2.png')));
 
       // Text('LOADING',
       //     style: TextStyle(
@@ -89,23 +89,25 @@ class _FallState extends State<Fall> {
         return Scaffold(
             body: Center(
                 child: Column(children: [
-          Text('Yes, you fell',
+          Text('A fall has been detected.',
               style: TextStyle(
                   fontWeight: FontWeight.w900,
                   color: Color(0xffDB5461),
-                  fontSize: 30)),
+                  fontSize: 32)),
           Text('Calling emergency services in $_counter seconds',
               style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  color: Color(0xffDB5461),
-                  fontSize: 15)),
+                  color: Color(0xff2B3964),
+                  fontSize: 20)),
           ElevatedButton(
             onPressed: () {
               Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             child: Text('I\'m fine! Stop the call!',
                 style: TextStyle(
-                    fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xffDB5461),
+                    fontSize: 25)),
           )
         ], mainAxisSize: MainAxisSize.min)));
       } else {

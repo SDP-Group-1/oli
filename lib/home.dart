@@ -49,7 +49,8 @@ class HomeButtons extends StatelessWidget {
                       child: Text('Call OLI',
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
-                              color: Color(0xffdb5461))),
+                              color: Color(0xffdb5461),
+                              fontSize: 25)),
                     ))),
             Padding(
                 //SET UP BUTTON
@@ -61,25 +62,31 @@ class HomeButtons extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(context, '/setup');
                       },
-                      child: Text('Setup',
+                      child: Text('Set Up',
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
-                              color: Color(0xffDB5461))),
+                              color: Color(0xffDB5461),
+                              fontSize: 25)),
                     ))),
             Padding(
                 //BACKGROUND SENSOR DEMO BUTTON
                 padding: EdgeInsets.only(top: 10.0),
                 child: SizedBox(
                     width: 200,
-                    height: 50,
+                    height: 80,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/background');
                       },
-                      child: Text('Background sensors demo',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xffDB5461))),
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text('Fall detection demo',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xffDB5461),
+                                fontSize: 25,
+                              ),
+                              textAlign: TextAlign.center)),
                     ))),
           ],
         )));
@@ -96,44 +103,42 @@ class _RobotState extends State<Robot> {
 
   @override
   Widget build(BuildContext context) {
-    if (isConnected) return Padding(
+    if (isConnected)
+      return Padding(
         padding: EdgeInsets.only(top: 40.0),
-      child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.done_outline,
-            color: Colors.green,
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.done_outline,
+                color: Colors.green,
+              ),
+              Text('Robot connected.',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
+            ],
+          ),
         ),
-          Text('Robot connected.',
-          style: TextStyle(
-          fontWeight: FontWeight.w900,
-          color: Color(0xffDB5461))
+      );
+    else
+      return Padding(
+        padding: EdgeInsets.only(top: 40.0),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.clear,
+                color: Colors.red,
+              ),
+              Text('Robot not connected.',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
+            ],
+          ),
         ),
-        ],
-        ),
-      ),
-    );
-    else return Padding(
-      padding: EdgeInsets.only(top: 40.0),
-      child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.clear,
-              color: Colors.red,
-            ),
-            Text('Robot not connected.',
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xffDB5461))
-            ),
-          ],
-        ),
-      ),
-    );
+      );
   }
 
   checkConnection() async{
