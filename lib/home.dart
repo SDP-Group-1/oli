@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ftpconnect/ftpconnect.dart';
+import 'dart:io';
 
 class HomePage extends StatelessWidget {
   @override
@@ -132,5 +134,21 @@ class _RobotState extends State<Robot> {
         ),
       ),
     );
+  }
+
+  checkConnection() async{
+    // TODO: find out how to properly do this
+    FTPConnect ftpConnect = FTPConnect('example.com', user:'oli', pass:'oli');
+    String fileName = 'OLI-CONNECT';
+    File signal = File(fileName);
+    await ftpConnect.connect();
+    await ftpConnect.downloadFileWithRetry(fileName, signal);
+    await ftpConnect.disconnect();
+
+    List<String> lines = await signal.readAsLines();
+    var last = DateTime.parse(lines.last);
+    if (last.difference(DateTime.now()).inMinutes < 10) isConnected = true;
+    else isConnected = false;
+
   }
 }

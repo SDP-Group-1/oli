@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'dart:io';
+import 'package:ftpconnect/ftpConnect.dart';
 
 class Call extends StatefulWidget {
   @override
@@ -15,7 +17,6 @@ class _CallState extends State<Call> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -27,6 +28,7 @@ class _CallState extends State<Call> {
           if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
             lat = snapshot.data.latitude.toString();
             lng = snapshot.data.longitude.toString();
+            sendSignal();
             return Scaffold(
               appBar: AppBar(
                 title: Text('Calling OLI'),
@@ -44,6 +46,9 @@ class _CallState extends State<Call> {
         });
   }
 
+
+
+  // to be updated in the future
   Future<LocationData> getLoc() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
@@ -69,5 +74,15 @@ class _CallState extends State<Call> {
     LocationData _locationData = await location.getLocation();
 
     return _locationData;
+  }
+
+  sendSignal() async{
+    FTPConnect ftpConnect = FTPConnect('example.com', user:'oli', pass:'oli');
+    File signal = File('OLI-COMMAND');
+    signal.openWrite();
+    await signal.writeAsString("CALL, $lng, $lat");
+    await ftpConnect.connect();
+    bool res = await ftpConnect.uploadFileWithRetry(signal, pRetryCount: 2);
+    await ftpConnect.disconnect();
   }
 }

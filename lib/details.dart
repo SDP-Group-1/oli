@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class Details extends StatelessWidget {
   @override
@@ -20,6 +22,9 @@ class DetailForm extends StatefulWidget {
 }
 
 class _DetailFormState extends State<DetailForm> {
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -28,6 +33,7 @@ class _DetailFormState extends State<DetailForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: nameController,
           decoration: InputDecoration(
             icon: Icon(Icons.person),
             hintText: 'Enter your name',
@@ -49,8 +55,19 @@ class _DetailFormState extends State<DetailForm> {
         )),
         Center(
             child: Container(
-                child: RaisedButton(child: Text('Submit'), onPressed: null)))
+                child: RaisedButton(child: Text('Submit'), onPressed: () {
+                  write(nameController.text, numberController.text);
+                })))
       ],
     )));
+  }
+
+  write(String name, String number) async{
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/saved_data.txt');
+    if (await file.length() != 0) {
+      await file.delete();
+    }
+    await file.writeAsString('$name, $number');
   }
 }

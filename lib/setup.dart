@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ftpconnect/ftpconnect.dart';
+import 'dart:io';
 
 class Setup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    sendSignal();
     return Scaffold(
         body: Padding(
           padding: EdgeInsets.only(top: 40.0),
@@ -44,5 +47,14 @@ class Setup extends StatelessWidget {
           )
         )
     );
+  }
+  sendSignal() async{
+    FTPConnect ftpConnect = FTPConnect('example.com', user:'oli', pass:'oli');
+    File signal = File('OLI-COMMAND');
+    signal.openWrite();
+    await signal.writeAsString("MAP");
+    await ftpConnect.connect();
+    bool res = await ftpConnect.uploadFileWithRetry(signal, pRetryCount: 2);
+    await ftpConnect.disconnect();
   }
 }
