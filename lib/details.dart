@@ -4,15 +4,13 @@ class Details extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Your details';
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: DetailForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(appTitle),
       ),
+      body: DetailForm(),
     );
+    // );
   }
 }
 
@@ -25,7 +23,8 @@ class _DetailFormState extends State<DetailForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-        child: Column(
+        child: Center(
+            child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
@@ -42,10 +41,16 @@ class _DetailFormState extends State<DetailForm> {
             labelText: 'Emergency contact',
           ),
         ),
+        TextFormField(
+            decoration: InputDecoration(
+          icon: Icon(Icons.home_filled),
+          hintText: '6 digit postcode',
+          labelText: 'Enter your postcode',
+        )),
         Center(
             child: Container(
                 child: RaisedButton(child: Text('Submit'), onPressed: null)))
       ],
-    ));
+    )));
   }
 }

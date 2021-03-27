@@ -16,3 +16,5 @@ The app consists of:
 - [background.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/background.dart) - the background processes required for monitoring the sensors and detection a fall
 - [database.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/database.dart) - helper functions used to manipulate a local SQLite database
 
+
+NOTE - I HAVE ADDED SUPPORT TO PUBLISH THE APP TO THE PLAY STORE. I HAVE ADDED A SIGNING KEY TO PUBLISH IT, AND I HAVE THE KEY.PROPERTIES FILE THAT CONTAINS THE PASSWORD TO SIGN THE APP BUNDLE.

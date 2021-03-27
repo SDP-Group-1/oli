@@ -1,7 +1,7 @@
 /**
- * background.dart - contains the stateless widget that provides the 
- * UI for fall detection. There are a lot of background processes going 
- * on here, with respect to listening to sensors and inserting data 
+ * background.dart - contains the stateless widget that provides the
+ * UI for fall detection. There are a lot of background processes going
+ * on here, with respect to listening to sensors and inserting data
  * into the SQLite database (see database.dart for helper methods).
  */
 import 'dart:async';
@@ -17,6 +17,7 @@ import 'package:oli/flaskApi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sqflite_porter/utils/csv_utils.dart';
+import 'postFall.dart';
 
 import 'flaskApi.dart';
 
@@ -41,6 +42,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
   int currentID;
   int triggerID;
+  bool isTriggered = false;
   DatabaseHelper helper;
 
   @override
@@ -70,8 +72,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Acc that crossed threshold: $userAccelerometer',
-                    style: TextStyle(fontSize: 20)),
+                Text('Triggered: $isTriggered', style: TextStyle(fontSize: 20)),
               ],
             ),
             padding: const EdgeInsets.all(8.0),
@@ -97,7 +98,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       subscription.cancel();
       print('cancelling subs');
     }
-    var a = helper.dropTable();
+    helper.dropTable();
     //should probably replace the a with something else :/
   }
 
@@ -115,7 +116,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     new MethodChannel("flutter.temp.channel")
         .setMethodCallHandler(platformCallHandler);
     _userAccelerometerValues = <double>[0.0, 0.0, 0.0];
-    const twoSeconds = const Duration(seconds: 2);
+    const twoSeconds = const Duration(seconds: 5);
     // new Timer.periodic(fiveSecondInterval, (Timer t) {
     //   //write csv file here, delete contents of db / create new db????
     // });
@@ -125,22 +126,19 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         //if 17 m/s^2 is crossed
         updateDatabase();
         _accelerometerValues = <double>[event.x, event.y, event.z];
-        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17) {
+        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17 &&
+            triggerID == 0) {
           triggerID = currentID;
+          isTriggered = true;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
           print("We been triggered");
           Future.delayed(twoSeconds, () {
             print(triggerID.toString() + ': trigger ID');
 
-            writeCSV(triggerID - 50, triggerID + 50);
-
-            // if (getPredict(csv_path) == 1) {
-            //   setState(() {
-            //
-            //   });
-            // }
-            Navigator.popAndPushNamed(context, '/fall');
+            // String directory_path =
+            //'/data/user/0/com.example.oli/app_flutter/dataset.csv';
+            callClassifier();
           });
         }
       });
@@ -150,6 +148,36 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         _gyroscopeValues = <double>[event.x, event.y, event.z];
       });
     }));
+  }
+
+  void callClassifier() async {
+    String dataset = await writeCSV(triggerID - 50, triggerID + 50);
+    print("something here to see if it works");
+    // print(dataset);
+    print("Finished writing CSV, now classifier");
+    var classifierResult = await getPredict(dataset);
+    print("Classifier result : $classifierResult");
+    if (classifierResult == 'Fall') {
+      setState(() {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Fall(hasFallen: true),
+          ),
+        );
+      });
+    } else {
+      setState(() {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Fall(hasFallen: false),
+          ),
+        );
+      });
+    }
   }
 
   /////
@@ -166,7 +194,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(currentID.toString() + ":currentID _________________________");
   }
 
-  void writeCSV(int id1, int id2) async {
+  Future<String> writeCSV(int id1, int id2) async {
+    print("=====================================");
+    print("$id1 to $id2");
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
       print('cancelling subs');
@@ -178,10 +208,12 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     var requiredWindow = await helper.queryReadings(id1, id2);
     print('query done');
     var dataset = mapListToCsv(requiredWindow);
-    print(dataset);
-    file.writeAsString(dataset);
-    print(file.path);
-
+    return dataset;
+    // print(dataset);
+    // file.writeAsString(dataset);
+    // print("File path");
+    // print(file.path);
+    // return file.path;
     //optional - add Navigator,pop to remove this from the route
     //will automatically call dispose - then add the new widget depending on
     //whether that was a fall or not.

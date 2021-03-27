@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/call': (context) => Call(),
         '/setup': (context) => Setup(),
         '/setup/details': (context) => Details(),
-        '/fall': (context) => FallDetection(),
+        '/fall': (context) => Fall(),
         '/ems': (context) => EMS()
       },
       title: 'OLI',

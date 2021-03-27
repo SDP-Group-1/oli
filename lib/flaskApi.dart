@@ -1,19 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<int> getPredict(csv_path) async {
+Future<String> getPredict(csv_str) async {
+  // var dict = jsonEncode({'csv' : csv_str});
   final response = await http.post(
-      'https//127.0.0.1:5000/',
-      headers: <String, String> {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'path': csv_path,
-      }),
-  );
-
+    'http://192.168.50.144:5000/',
+    headers: {'Content-Type': 'application/json; charset=utf-8'},
+    body: jsonEncode(<String, String>{
+      'csv': csv_str,
+    }));
+  print(response.statusCode);
   if (response.statusCode == 200) {
-    final decoded = json.decode(response.body) as Map<String, int>;
+    final decoded = json.decode(response.body) as Map<String, dynamic>;
     return decoded['result'];
   }
 }

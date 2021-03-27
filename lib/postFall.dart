@@ -2,11 +2,11 @@ import 'package:loading_gifs/loading_gifs.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class FallDetection extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Scaffold(body: Fall());
-  }
-}
+// class FallDetection extends StatelessWidget {
+//   Widget build(BuildContext context) {
+//     return Scaffold(body: Fall());
+//   }
+// }
 
 class EMS extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -19,27 +19,31 @@ class EMS extends StatelessWidget {
 }
 
 class Fall extends StatefulWidget {
+  final bool hasFallen;
+
+  const Fall({Key key, this.hasFallen}) : super(key: key);
   @override
   _FallState createState() => _FallState();
 }
 
 class _FallState extends State<Fall> {
   var _isLoading;
-  var _hasFallen;
   var _counter;
-
+  Timer t;
+  Timer a;
   @override
   void initState() {
     super.initState();
     _isLoading = true;
-    _hasFallen = true;
-    _counter = 10;
-    new Timer.periodic(Duration(seconds: 5), (Timer t) {
+    _counter = 30;
+    new Timer.periodic(Duration(seconds: 2), (t) {
+      if (!mounted) return;
       setState(() {
         print('yoyoyoyoyo');
         _isLoading = false;
         t.cancel();
-        new Timer.periodic(Duration(seconds: 1), (Timer a) {
+        new Timer.periodic(Duration(seconds: 1), (a) {
+          if (!mounted) return;
           setState(() {
             _counter = _counter - 1;
             if (_counter == 0) {
@@ -54,6 +58,13 @@ class _FallState extends State<Fall> {
 
   @override
   dispose() {
+    if (t != null) {
+      t.cancel();
+    }
+    if (a != null) {
+      a.cancel();
+    }
+
     super.dispose();
   }
 
@@ -72,7 +83,7 @@ class _FallState extends State<Fall> {
       //         color: Color(0xffDB5461),
       //         fontSize: 30))
     } else {
-      if (_hasFallen) {
+      if (widget.hasFallen) {
         return Scaffold(
             body: Center(
                 child: Column(children: [
