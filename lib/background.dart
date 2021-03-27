@@ -96,7 +96,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     super.dispose();
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
-      print('cancelling subs');
+      print('cancelling stream subscriptions');
     }
     helper.dropTable();
     //should probably replace the a with something else :/
@@ -131,8 +131,8 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
           triggerID = currentID;
           isTriggered = true;
           print(
-              'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
-          print("We been triggered");
+              '--------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
+          print("Classifier triggered");
           Future.delayed(twoSeconds, () {
             print(triggerID.toString() + ': trigger ID');
 
@@ -152,9 +152,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
 
   void callClassifier() async {
     String dataset = await writeCSV(triggerID - 50, triggerID + 50);
-    print("something here to see if it works");
+    //print("something here to see if it works");
     // print(dataset);
-    print("Finished writing CSV, now classifier");
+    print("Finished writing sensor data in CSV, sending to classifier");
     var classifierResult = await getPredict(dataset);
     print("Classifier result : $classifierResult");
     if (classifierResult == 'Fall') {
@@ -182,7 +182,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
 
   /////
   Future<int> updateDatabase() async {
-    print('This timer works');
+    print('logging sensor data into database');
     Reading reading = Reading();
     reading.accelerometerX = _accelerometerValues[0];
     reading.accelerometer_y = _accelerometerValues[1];
@@ -195,7 +195,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 
   Future<String> writeCSV(int id1, int id2) async {
-    print("=====================================");
+    print("============================================");
     print("$id1 to $id2");
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
