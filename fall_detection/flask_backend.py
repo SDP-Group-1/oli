@@ -63,13 +63,16 @@ def predict():
     csv_str = request.json['csv']
     clf = load_model()
     sample = parse(csv_str)
+    print(sample)
     result = clf.predict(sample)[0]
     if result == 1:
+        print('This is a fall event')
+        return jsonify({'result': 'Fall'})
+    elif result == 0:
         print('This is a normal event')
         return jsonify({'result': 'Normal'})
     else:
-        print('This is a fall event')
-        return jsonify({'result': 'Fall'})
+        raise Exception("Did not get correct prediction!")
 
 if __name__ == '__main__':
     relative_path = os.path.dirname(os.path.abspath(__file__))
