@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class Details extends StatelessWidget {
   @override
@@ -48,6 +50,7 @@ class DetailForm extends StatefulWidget {
 }
 
 class _DetailFormState extends State<DetailForm> {
+
   String username;
   String contactNumber;
   String postcode;
@@ -145,5 +148,15 @@ class _DetailFormState extends State<DetailForm> {
                                 })))
                   ],
                 ))));
+
+  }
+
+  write(String name, String number) async{
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/saved_data.txt');
+    if (await file.length() != 0) {
+      await file.delete();
+    }
+    await file.writeAsString('$name, $number');
   }
 }

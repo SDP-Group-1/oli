@@ -48,7 +48,9 @@ class _FallState extends State<Fall> {
             _counter = _counter - 1;
             if (_counter == 0) {
               a.cancel();
-              Navigator.pushReplacementNamed(context, '/ems');
+              if (widget.hasFallen) {
+                Navigator.pushReplacementNamed(context, '/ems');
+              }
             }
           });
         });
