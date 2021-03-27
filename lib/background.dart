@@ -17,6 +17,7 @@ import 'package:oli/flaskApi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sqflite_porter/utils/csv_utils.dart';
+import 'postFall.dart';
 
 import 'flaskApi.dart';
 
@@ -41,6 +42,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
   int currentID;
   int triggerID;
+  bool isTriggered = false;
   DatabaseHelper helper;
 
   @override
@@ -70,8 +72,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Acc that crossed threshold: $userAccelerometer',
-                    style: TextStyle(fontSize: 20)),
+                Text('Triggered: $isTriggered', style: TextStyle(fontSize: 20)),
               ],
             ),
             padding: const EdgeInsets.all(8.0),
@@ -128,6 +129,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17 &&
             triggerID == 0) {
           triggerID = currentID;
+          isTriggered = true;
           print(
               'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
           print("We been triggered");
@@ -151,16 +153,30 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   void callClassifier() async {
     String dataset = await writeCSV(triggerID - 50, triggerID + 50);
     print("something here to see if it works");
-    print(dataset);
+    // print(dataset);
     print("Finished writing CSV, now classifier");
     var classifierResult = await getPredict(dataset);
     print("Classifier result : $classifierResult");
     if (classifierResult == 'Fall') {
       setState(() {
-        Navigator.popAndPushNamed(context, '/fall');
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Fall(hasFallen: true),
+          ),
+        );
       });
     } else {
-      print("Not a fall");
+      setState(() {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Fall(hasFallen: false),
+          ),
+        );
+      });
     }
   }
 
