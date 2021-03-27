@@ -27,19 +27,20 @@ class _FallState extends State<Fall> {
   var _isLoading;
   var _hasFallen;
   var _counter;
-
+  Timer t;
+  Timer a;
   @override
   void initState() {
     super.initState();
     _isLoading = true;
     _hasFallen = true;
     _counter = 10;
-    new Timer.periodic(Duration(seconds: 5), (Timer t) {
+    new Timer.periodic(Duration(seconds: 5), (t) {
       setState(() {
         print('yoyoyoyoyo');
         _isLoading = false;
         t.cancel();
-        new Timer.periodic(Duration(seconds: 1), (Timer a) {
+        new Timer.periodic(Duration(seconds: 1), (a) {
           setState(() {
             _counter = _counter - 1;
             if (_counter == 0) {
@@ -55,6 +56,12 @@ class _FallState extends State<Fall> {
   @override
   dispose() {
     super.dispose();
+    if (t != null) {
+      t.cancel();
+    }
+    if (a != null) {
+      a.cancel();
+    }
   }
 
   Widget build(BuildContext context) {

@@ -37,7 +37,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   //each list element can be linked to one sensor? instead of using
   //broadcast stream
   List<StreamSubscription<dynamic>> _streamSubscriptions =
-  <StreamSubscription<dynamic>>[];
+      <StreamSubscription<dynamic>>[];
   List<double> _accelerometerValues, _gyroscopeValues, _userAccelerometerValues;
   int currentID;
   int triggerID;
@@ -46,9 +46,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   @override
   Widget build(BuildContext context) {
     final List<String> accelerometer =
-    _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
+        _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
     final List<String> gyroscope =
-    _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
+        _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
     final List<String> userAccelerometer = _userAccelerometerValues
         ?.map((double v) => v.toStringAsFixed(1))
         ?.toList();
@@ -56,36 +56,36 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Padding(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Accelerometer: $accelerometer',
-                        style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-                padding: const EdgeInsets.all(8.0),
-              ),
-              Padding(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Acc that crossed threshold: $userAccelerometer',
-                        style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-                padding: const EdgeInsets.all(8.0),
-              ),
-              Padding(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Gyroscope: $gyroscope', style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-                padding: const EdgeInsets.all(8.0),
-              )
-            ]));
+          Padding(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Accelerometer: $accelerometer',
+                    style: TextStyle(fontSize: 20)),
+              ],
+            ),
+            padding: const EdgeInsets.all(8.0),
+          ),
+          Padding(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Acc that crossed threshold: $userAccelerometer',
+                    style: TextStyle(fontSize: 20)),
+              ],
+            ),
+            padding: const EdgeInsets.all(8.0),
+          ),
+          Padding(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Gyroscope: $gyroscope', style: TextStyle(fontSize: 20)),
+              ],
+            ),
+            padding: const EdgeInsets.all(8.0),
+          )
+        ]));
   }
 
   @override
@@ -115,7 +115,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     new MethodChannel("flutter.temp.channel")
         .setMethodCallHandler(platformCallHandler);
     _userAccelerometerValues = <double>[0.0, 0.0, 0.0];
-    const twoSeconds = const Duration(seconds: 2);
+    const twoSeconds = const Duration(seconds: 5);
     // new Timer.periodic(fiveSecondInterval, (Timer t) {
     //   //write csv file here, delete contents of db / create new db????
     // });
@@ -154,6 +154,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     print(dataset);
     print("Finished writing CSV, now classifier");
     var classifierResult = await getPredict(dataset);
+    print("Classifier result : $classifierResult");
     if (classifierResult == 'Fall') {
       setState(() {
         Navigator.popAndPushNamed(context, '/fall');
