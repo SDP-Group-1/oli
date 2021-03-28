@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:ftpconnect/ftpconnect.dart';
+import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-            padding: EdgeInsets.only(left: 0, top: 100.0, right: 0, bottom: 0),
+            padding: EdgeInsets.only(gitleft: 0, top: 100.0, right: 0, bottom: 0),
             child: new Column(
               children: [
                 new Text('O.L.I.',
@@ -21,6 +27,7 @@ class HomePage extends StatelessWidget {
                         color: Color(0xff2B3964),
                         fontSize: 30)),
                 HomeButtons(),
+                User(),
                 Robot(),
               ],
             )));
@@ -93,6 +100,41 @@ class HomeButtons extends StatelessWidget {
   }
 }
 
+class User extends StatefulWidget {
+  @override
+  _UserState createState() => _UserState();
+}
+
+class _UserState extends State<User> {
+  String userName;
+
+  @override
+  Widget build(BuildContext context) {
+      return Padding(
+        padding: EdgeInsets.only(top: 40.0),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Hello, $userName',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900, color: Color(0xffDB5461))),
+            ],
+          ),
+        ),
+      );
+  }
+
+  read(String name, String number, String postcode) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/saved_data.txt');
+    var lines = await file.readAsLines();
+    var splits = lines.last.split(',');
+    userName = splits.first;
+  }
+}
+
+
 class Robot extends StatefulWidget {
   @override
   _RobotState createState() => _RobotState();
@@ -156,4 +198,5 @@ class _RobotState extends State<Robot> {
     else isConnected = false;
 
   }
+
 }
