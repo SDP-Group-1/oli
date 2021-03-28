@@ -137,6 +137,7 @@ class _DetailFormState extends State<DetailForm> {
                                 onPressed: () {
                                   if (_formKey.currentState.validate()) {
                                     _formKey.currentState.save();
+                                    write(username, contactNumber, postcode);
                                     Navigator.popUntil(
                                         context, ModalRoute.withName('/'));
                                     Navigator.push(
@@ -151,12 +152,12 @@ class _DetailFormState extends State<DetailForm> {
 
   }
 
-  write(String name, String number) async{
+  write(String name, String number, String postcode) async{
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/saved_data.txt');
     if (await file.length() != 0) {
       await file.delete();
     }
-    await file.writeAsString('$name, $number');
+    await file.writeAsString('$name, $number, $postcode');
   }
 }
