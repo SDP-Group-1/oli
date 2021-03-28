@@ -15,6 +15,8 @@ The app consists of:
 - [setup.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/setup.dart) - interface for user to set up the app and send a request to the robot to map their home. 
 - [background.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/background.dart) - the background processes required for monitoring the sensors and detection a fall
 - [database.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/database.dart) - helper functions used to manipulate a local SQLite database
+- [details.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/details.dart) - form to accept user details
+- [postFall.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/postFall.dart) - after the classfier determines whether the action was a fall or not, this file takes care of the UI for the response. 
+- [flaskApi.dart](https://github.com/SDP-Group-1/oli/blob/main/lib/flaskApi.dart) - communicates with the classifier on the backend. 
 
-
-NOTE - I HAVE ADDED SUPPORT TO PUBLISH THE APP TO THE PLAY STORE. I HAVE ADDED A SIGNING KEY TO PUBLISH IT, AND I HAVE THE KEY.PROPERTIES FILE THAT CONTAINS THE PASSWORD TO SIGN THE APP BUNDLE.
+Additionally, a Flask server is present in [/fall-detection](https://github.com/SDP-Group-1/oli/tree/main/fall_detection), which should be run prior to testing the app.  
