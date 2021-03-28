@@ -162,7 +162,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
 
   /////
   Future<int> updateDatabase() async {
-    print('logging sensor data into database');
+    // print('logging sensor data into database');
     Reading reading = Reading();
     reading.accelerometerX = _accelerometerValues[0];
     reading.accelerometer_y = _accelerometerValues[1];
@@ -183,16 +183,16 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       print(
           '--------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
       print("Classifier triggered");
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(Duration(seconds: 4), () {
         print(triggerID.toString() + ': trigger ID');
         callClassifier();
       });
     }
-    print(currentID.toString() + ":currentID _________________________");
+    // print(currentID.toString() + ":currentID _________________________");
   }
 
   Future<String> writeCSV(int id1, int id2) async {
-    print("============================================");
+    // print("============================================");
     print("$id1 to $id2");
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
