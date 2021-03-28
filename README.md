@@ -1,8 +1,8 @@
 # operational lookout intern
-The repository for the OLI App
+The official repository for the O.L.I. app
 
 ## Purpose of the app: 
-
+The app is to be used alongside the O.L.I. robot. The main purpose of the app is to detect falls and alert the robot and emergency services when it occurs. The user's actions are monitored using the sensors present on the phone, primarily the accelerometer and gyroscope. 
 
 ## Structure:
 
