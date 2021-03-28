@@ -44,6 +44,7 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   int triggerID;
   bool isTriggered = false;
   DatabaseHelper helper;
+  Timer sensorReadings;
 
   @override
   Widget build(BuildContext context) {
@@ -108,29 +109,18 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     triggerID = 0;
     helper = DatabaseHelper.instance;
 
+    sensorReadings = new Timer.periodic(Duration(milliseconds: 20), (Timer x) {
+      updateDatabase();
+    });
+
+//monitoring sensors
     new MethodChannel("flutter.temp.channel")
         .setMethodCallHandler(platformCallHandler);
     _userAccelerometerValues = <double>[0.0, 0.0, 0.0];
-    const twoSeconds = const Duration(seconds: 5);
     _streamSubscriptions
         .add(accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
-        //if 17 m/s^2 is crossed
-        updateDatabase();
         _accelerometerValues = <double>[event.x, event.y, event.z];
-        if (sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2)) > 17 &&
-            triggerID == 0) {
-          triggerID = currentID;
-          isTriggered = true;
-          print(
-              '--------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
-          print("Classifier triggered");
-          Future.delayed(twoSeconds, () {
-            print(triggerID.toString() + ': trigger ID');
-
-            callClassifier();
-          });
-        }
       });
     }));
     _streamSubscriptions.add(gyroscopeEvents.listen((GyroscopeEvent event) {
@@ -141,9 +131,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
   }
 
   void callClassifier() async {
-    String dataset = await writeCSV(triggerID - 50, triggerID + 50);
-    //print("something here to see if it works");
-    // print(dataset);
+    sensorReadings.cancel();
+    String dataset = await writeCSV(triggerID - 100, triggerID + 150);
+    print(dataset);
     print("Finished writing sensor data in CSV, sending to classifier");
     var classifierResult = await getPredict(dataset);
     print("Classifier result : $classifierResult");
@@ -181,6 +171,23 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     reading.gyro_y = _gyroscopeValues[1];
     reading.gyro_z = _gyroscopeValues[2];
     currentID = await helper.insert(reading);
+
+    //checking if reading has crossed threshold here
+    if (sqrt(pow(reading.accelerometerX, 2) +
+                pow(reading.accelerometer_y, 2) +
+                pow(reading.accelerometer_z, 2)) >
+            17 &&
+        triggerID == 0) {
+      triggerID = currentID;
+      isTriggered = true;
+      print(
+          '--------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------------');
+      print("Classifier triggered");
+      Future.delayed(Duration(seconds: 3), () {
+        print(triggerID.toString() + ': trigger ID');
+        callClassifier();
+      });
+    }
     print(currentID.toString() + ":currentID _________________________");
   }
 
