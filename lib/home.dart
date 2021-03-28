@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-            padding: EdgeInsets.only(gitleft: 0, top: 100.0, right: 0, bottom: 0),
+            padding: EdgeInsets.only(left: 0, top: 100.0, right: 0, bottom: 0),
             child: new Column(
               children: [
                 new Text('O.L.I.',
