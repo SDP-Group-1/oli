@@ -51,9 +51,9 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
         _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
     final List<String> gyroscope =
         _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
-    final List<String> userAccelerometer = _userAccelerometerValues
-        ?.map((double v) => v.toStringAsFixed(1))
-        ?.toList();
+    // final List<String> userAccelerometer = _userAccelerometerValues
+    //     ?.map((double v) => v.toStringAsFixed(1))
+    //     ?.toList();
     return new Scaffold(
         body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -99,7 +99,6 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       print('cancelling stream subscriptions');
     }
     helper.dropTable();
-    //should probably replace the a with something else :/
   }
 
   @override
@@ -108,18 +107,11 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     currentID = 0;
     triggerID = 0;
     helper = DatabaseHelper.instance;
-    //referencing database.dart
 
-    //tried to create table again using the method every time initstate is called
-    //but error here - table not found
-    // helper.onCreate(helper.getDatabase(), helper.getDatabaseVersion());
     new MethodChannel("flutter.temp.channel")
         .setMethodCallHandler(platformCallHandler);
     _userAccelerometerValues = <double>[0.0, 0.0, 0.0];
     const twoSeconds = const Duration(seconds: 5);
-    // new Timer.periodic(fiveSecondInterval, (Timer t) {
-    //   //write csv file here, delete contents of db / create new db????
-    // });
     _streamSubscriptions
         .add(accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
@@ -136,8 +128,6 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
           Future.delayed(twoSeconds, () {
             print(triggerID.toString() + ': trigger ID');
 
-            // String directory_path =
-            //'/data/user/0/com.example.oli/app_flutter/dataset.csv';
             callClassifier();
           });
         }
@@ -201,22 +191,14 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
       subscription.cancel();
       print('cancelling subs');
     }
-    final directory = await getApplicationDocumentsDirectory();
-    print(directory);
-    final file = File('${directory.path}/dataset.csv');
-    print('file created');
+    // final directory = await getApplicationDocumentsDirectory();
+    // print(directory);
+    // final file = File('${directory.path}/dataset.csv');
+    // print('file created');
     var requiredWindow = await helper.queryReadings(id1, id2);
     print('query done');
     var dataset = mapListToCsv(requiredWindow);
     return dataset;
-    // print(dataset);
-    // file.writeAsString(dataset);
-    // print("File path");
-    // print(file.path);
-    // return file.path;
-    //optional - add Navigator,pop to remove this from the route
-    //will automatically call dispose - then add the new widget depending on
-    //whether that was a fall or not.
   }
 
   Future<dynamic> platformCallHandler(MethodCall call) async {
@@ -226,8 +208,3 @@ class _BackgroundActivityState extends State<BackgroundActivity> {
     }
   }
 } //_BACKGROUND ACTIVITY STATE
-
-////TO DEBUG -
-///Why database never closes / deletes?
-/// Values not getting inserted into db but condition (accelerometer) being read correctly
-///
