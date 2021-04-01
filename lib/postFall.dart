@@ -100,14 +100,23 @@ class _FallState extends State<Fall> {
                   color: Color(0xff2B3964),
                   fontSize: 20)),
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.pressed))
+                    return Color(0xffDB5461);
+                  return null; // Use the component's default.
+                },
+              ),
+            ),
             onPressed: () {
               Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             child: Text('I\'m fine! Stop the call!',
                 style: TextStyle(
                     fontWeight: FontWeight.w900,
-                    color: Color(0xffDB5461),
-                    fontSize: 25)),
+                    color: Color(0xff2B3964),
+                    fontSize: 30)),
           )
         ], mainAxisSize: MainAxisSize.min)));
       } else {
